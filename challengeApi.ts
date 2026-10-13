@@ -4,6 +4,32 @@ import { GoogleGenAI } from '@google/genai';
 
 export const MODEL = 'gemini-3.8-flash';
 
+// Free-tier keys are the first to be turned away when Gemini is busy
+// (503 "high demand"). Retry once, then fall back to an older Flash model.
+const MODELS = [MODEL, MODEL, 'gemini-3.5-flash'];
+
+export async function generateWithFallback(
+  ai: GoogleGenAI,
+  params: Omit<Parameters<GoogleGenAI['models']['generateContent']>[0], 'model'>
+) {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await ai.models.generateContent({ ...params, model: MODELS[attempt] });
+    } catch (err: any) {
+      const busy = /\b(503|429)\b|UNAVAILABLE|RESOURCE_EXHAUSTED|high demand/i.test(
+        String(err?.status ?? '') + ' ' + String(err?.message ?? '')
+      );
+      if (!busy) throw err;
+      if (attempt === MODELS.length - 1) {
+        throw new Error(
+          'Gemini is busy right now. Wait a minute and click Try Again. If it keeps happening, use a Gemini API key from a project with billing enabled.'
+        );
+      }
+      await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
+    }
+  }
+}
+
 export interface SiteContext {
   address: string;
   town: string;
@@ -33,8 +59,7 @@ export async function askGeminiJson<T>(
     apiKey,
     httpOptions: { headers: { 'User-Agent': 'aistudio-build' } },
   });
-  const response = await ai.models.generateContent({
-    model: MODEL,
+  const response = await generateWithFallback(ai, {
     contents: prompt,
     config: {
       systemInstruction,
