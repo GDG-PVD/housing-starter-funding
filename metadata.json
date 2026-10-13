@@ -1,0 +1,8 @@
+{
+  "name": "Site Explorer: Challenge 3 starter",
+  "description": "Site Explorer with the Challenge 3 tab built in: How does this project get funded? For Rhode Island housing practitioners.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
