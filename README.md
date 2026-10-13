@@ -27,7 +27,7 @@ Working in Google AI Studio instead of an editor? [Remix Site Explorer](https://
 
 ## Your Google Maps key
 
-The app hands the Maps key to the browser to draw the map, so anyone who opens a shared copy can read it. In the Google Cloud console (APIs & Services, then Credentials, then your key), restrict it to your app's website and to the Maps JavaScript, Geocoding and Places APIs. Never paste a key into a chat or commit one.
+The app hands the Maps key to the browser to draw the map, so anyone who opens a shared copy can read it. The server also uses the same key to look up addresses and nearby places, so do not restrict it to your app's website: Google refuses website-restricted keys on server calls, and address search would fail while the map still draws. Instead, in the Google Cloud console (APIs & Services, then Credentials, then your key), restrict it to the Maps JavaScript, Geocoding, Places API (New) and Places APIs, set a low daily quota on each of those APIs, and delete the key after the event. Never paste a key into a chat or commit one.
 
 ## Keep going
 
