@@ -416,6 +416,58 @@ Write the plain-English summary in exactly 5 to 8 sentences for a housing develo
 // 6. Challenge 3 endpoint (see challenge.ts)
 registerChallenge(app);
 
+// 6. Translate the summary on demand (the summary card's language picker)
+app.post('/api/translate', async (req, res) => {
+  try {
+    const { text, disclaimer, language } = req.body;
+    if (!text || !language) {
+      return res.status(400).json({ error: 'Missing text or target language.' });
+    }
+
+    const geminiApiKey = process.env.GEMINI_API_KEY;
+    if (!geminiApiKey) {
+      return res.status(500).json({
+        error: 'GEMINI_API_KEY is not configured in environment or Secrets.',
+      });
+    }
+
+    const ai = new GoogleGenAI({
+      apiKey: geminiApiKey,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build',
+        },
+      },
+    });
+
+    const response = await generateWithFallback(ai, {
+      contents: JSON.stringify({ text, disclaimer: disclaimer || '' }),
+      config: {
+        systemInstruction: `Translate the "text" and "disclaimer" fields into ${language} for a housing practitioner in Rhode Island. Use plain, everyday wording. Keep street addresses, place names, business names, URLs and ordinance chapter numbers exactly as written. Do not add, drop or summarize anything.`,
+        temperature: 0.2,
+        responseMimeType: 'application/json',
+        responseJsonSchema: {
+          type: 'object',
+          properties: {
+            text: { type: 'string' },
+            disclaimer: { type: 'string' },
+          },
+          required: ['text', 'disclaimer'],
+        },
+      },
+    });
+
+    const translated = JSON.parse(response?.text || '{}');
+    if (!translated.text) {
+      throw new Error('Gemini returned an empty translation. Try again.');
+    }
+    res.json({ text: translated.text, disclaimer: translated.disclaimer || '' });
+  } catch (err: any) {
+    console.error('Gemini translate error:', err);
+    res.status(500).json({ error: err.message || 'Error translating the summary.' });
+  }
+});
+
 // Vite Middleware or Static file serving
 async function setupApp() {
   if (!isProduction) {
