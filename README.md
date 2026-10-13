@@ -45,4 +45,4 @@ Submit your team's app by 3:15 at [gdgpvd.dev/housing-jam](https://gdgpvd.dev/ho
 
 Everything Gemini drafts here is a starting point, not a zoning determination, legal advice or a funding commitment. Check with the town and the program.
 
-Licensed under the Apache License 2.0.
+Licensed under the [MIT License](LICENSE).
