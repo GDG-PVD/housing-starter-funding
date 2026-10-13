@@ -6,7 +6,7 @@ A starter for [Build for Good: AI Lab for Housing](https://gdgpvd.dev/housing-ja
 
 ## What's already built
 
-- A "Find funding programs" button: Gemini lists programs that could fund affordable housing at this site, with who runs each, who can apply, roughly how much, the next deadline and a link to the source page. Anything it is not sure of says "Check the source".
+- A "Find funding programs" button: Gemini lists programs that could fund affordable housing at this site, with who runs each, who can apply, roughly how much, the next deadline and a link to the source page. Anything it is not sure of says "Check the source", and every source link is checked before it is shown: a link that does not load is dropped.
 - A funding gap calculator: enter the total project cost and an amount for each source, tick the ones to count, and see the remaining gap. It is plain arithmetic, works without Gemini, and is tested (`npm test`).
 
 Below the map, amenities, zoning link and summary, the new tab is at the bottom of the page. The code is in `challenge.ts` (the `/api/funding` endpoint and its Gemini prompt), `src/components/ChallengePanel.tsx` (the tab) and `src/fundingGap.ts` (the calculator math).
