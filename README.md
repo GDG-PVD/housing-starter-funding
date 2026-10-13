@@ -36,6 +36,7 @@ Prompts to try next, in AI Studio or with your coding assistant:
 1. "Save the calculator for each address, so it is still there when I reload."
 2. "Add a chart showing each funding source as a share of the total cost."
 3. "Add a deadline column to the calculator and sort sources by the nearest deadline."
+4. "When I pick a language in the summary card, translate the Funding tab too. Keep program names, dollar amounts and links as they are."
 
 ## Submit
 
