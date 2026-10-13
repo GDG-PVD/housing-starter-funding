@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import { GoogleGenAI } from '@google/genai';
 import { matchRhodeIslandTown, TownInfo } from './townMatch';
 import { registerChallenge } from './challenge';
+import { generateWithFallback } from './challengeApi';
 
 dotenv.config();
 
@@ -384,8 +385,7 @@ ${amenityListText}
 Write the plain-English summary in exactly 5 to 8 sentences for a housing developer, ending with:
 "This is a starting point, not a zoning determination. Check with the town."`;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
+    const response = await generateWithFallback(ai, {
       contents: userPrompt,
       config: {
         systemInstruction,
@@ -393,7 +393,7 @@ Write the plain-English summary in exactly 5 to 8 sentences for a housing develo
       },
     });
 
-    let rawText = response.text ? response.text.trim() : '';
+    let rawText = response?.text ? response.text.trim() : '';
 
     // Guarantee the exact required ending sentence
     const MANDATORY_ENDING = 'This is a starting point, not a zoning determination. Check with the town.';
