@@ -46,4 +46,6 @@ Submit your team's app by 3:15 at [gdgpvd.dev/housing-jam](https://gdgpvd.dev/ho
 
 Everything Gemini drafts here is a starting point, not a zoning determination, legal advice or a funding commitment. Check with the town and the program.
 
-Licensed under the [MIT License](LICENSE).
+Code is licensed under the [Apache License 2.0](LICENSE). Copyright 2026 GDG Providence; see [NOTICE](NOTICE).
+
+Docs and any sample data are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
